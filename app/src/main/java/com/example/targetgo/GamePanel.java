@@ -39,7 +39,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         textPaint = new Paint();
         textPaint.setColor(Color.YELLOW);
-        textSize = MainActivity.GAME_HEIGHT/26f;
+        textSize = MainActivity.GAME_HEIGHT/40f;
         textPaint.setTextSize(textSize);
         textHeight = MainActivity.GAME_HEIGHT/14f;
     }
@@ -80,6 +80,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 10, textHeight+2*textSize, textPaint);
         c.drawText("Misses: " + operator.getTotalTargetsMissed(),
                 10, textHeight+3*textSize, textPaint);
+        c.drawText("Average: " + (int)operator.getAverageAccuracyOnHits(),
+                10, textHeight+4*textSize, textPaint);
 
         holder.unlockCanvasAndPost(c);
     }

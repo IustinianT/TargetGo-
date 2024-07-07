@@ -41,8 +41,6 @@ public class GameController {
         double points = 0;
         if(targetsHit.isEmpty()) {
             // player has missed a target
-            score = Math.max(score - 50, 0);
-            points = -50;
             totalTargetsMissed++;
         }
         else {
@@ -94,6 +92,10 @@ public class GameController {
             }
         }
         targets.removeAll(removables);
+    }
+
+    public double getAverageAccuracyOnHits() {
+        return score / totalTargetsHit;
     }
 
     public long getTimeLastCreated() {
