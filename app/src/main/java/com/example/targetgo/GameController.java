@@ -9,9 +9,11 @@ import java.util.ArrayList;
 
 public class GameController {
     private ArrayList<Target> targets;
+    private long timeLastCreated;
 
     public GameController() {
         targets = new ArrayList<>();
+        timeLastCreated = System.currentTimeMillis();
     }
 
     public void updateTargets() {
@@ -28,6 +30,7 @@ public class GameController {
 
     public void addTarget(Target target) {
         targets.add(target);
+        timeLastCreated = System.currentTimeMillis();
     }
 
     private void clearExpiredTargets() {
@@ -42,5 +45,9 @@ public class GameController {
 
     public ArrayList<Target> getTargets() {
         return targets;
+    }
+
+    public long getTimeLastCreated() {
+        return timeLastCreated;
     }
 }

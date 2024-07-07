@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 
+import com.example.targetgo.helpers.GameConstants;
+
 public class Target {
 
     private PointF pos;
@@ -23,7 +25,8 @@ public class Target {
     }
 
     public void updateTarget() {
-        if(System.currentTimeMillis() - timeCreated >= 3000) {
+        if(System.currentTimeMillis() - timeCreated >=
+                GameConstants.Target_Constants.DURATION * 1000) {
             toBeRemoved = true;
         }
     }

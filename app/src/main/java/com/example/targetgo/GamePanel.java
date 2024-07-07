@@ -34,18 +34,19 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         rand = new Random();
         operator = new GameController();
-
-        for(int i = 0; i < GameConstants.Operator_Constants.TARGET_AMOUNT; i++) {
-            operator.addTarget(new Target(
-                    rand.nextInt(MainActivity.GAME_WIDTH),
-                    rand.nextInt(MainActivity.GAME_HEIGHT),
-                    GameConstants.Target_Constants.RADIUS
-                    ));
-        }
     }
 
     public void update(double delta) {
         operator.updateTargets();
+
+        if(System.currentTimeMillis() - operator.getTimeLastCreated() >=
+                GameConstants.Operator_Constants.INITIAL_TARGET_CREATION_DELAY * 1000) {
+            operator.addTarget(new Target(
+                    rand.nextInt(MainActivity.GAME_WIDTH),
+                    rand.nextInt(MainActivity.GAME_HEIGHT),
+                    GameConstants.Target_Constants.RADIUS
+            ));
+        }
     }
 
     public void render() {
