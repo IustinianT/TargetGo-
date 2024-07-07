@@ -121,4 +121,11 @@ public class GameController {
     public double getLastHit() {
         return lastHit;
     }
+
+    public void resetStats() {
+        score = 0;
+        lastHit = 0;
+        totalTargetsHit = 0;
+        totalTargetsMissed = 0;
+    }
 }

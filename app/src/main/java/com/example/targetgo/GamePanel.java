@@ -9,6 +9,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.targetgo.helpers.GameConstants;
 import com.example.targetgo.interactables.Target;
@@ -24,6 +25,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private Paint textPaint;
     private float textSize;
     private float textHeight;
+
+    private long touchDownTime;
+    private boolean isHolding;
 
     private final Random rand;
 
@@ -83,14 +87,32 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         c.drawText("Average: " + (int)operator.getAverageAccuracyOnHits(),
                 10, textHeight+4*textSize, textPaint);
 
+        if(isHolding) {
+            c.drawText("Reset (2 seconds): " + (int)((System.currentTimeMillis()-touchDownTime)/1000)%3,
+                    10, textHeight+5*textSize, textPaint);
+        }
+
         holder.unlockCanvasAndPost(c);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // compute player touch event
-        if(event.getAction() == MotionEvent.ACTION_DOWN) {
-            operator.computeTouch(event);
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                operator.computeTouch(event);
+                touchDownTime = System.currentTimeMillis();
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                isHolding = true;
+                if(System.currentTimeMillis() - touchDownTime >= 2000) {
+                    operator.resetStats();
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                isHolding = false;
+                break;
         }
         return true;
     }
