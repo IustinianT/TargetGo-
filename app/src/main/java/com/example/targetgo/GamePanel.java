@@ -1,6 +1,5 @@
 package com.example.targetgo;
 
-import android.app.usage.UsageEvents;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -14,16 +13,19 @@ import androidx.annotation.NonNull;
 import com.example.targetgo.helpers.GameConstants;
 import com.example.targetgo.interactables.Target;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
-    private SurfaceHolder holder;
-    private GameLoop gameLoop;
-    private GameController operator;
+    private final SurfaceHolder holder;
+    private final GameLoop gameLoop;
+    private final GameController operator;
 
-    private Random rand;
+    private Paint textPaint;
+    private float textSize;
+    private float textHeight;
+
+    private final Random rand;
 
     public GamePanel(Context context) {
         super(context);
@@ -34,6 +36,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         rand = new Random();
         operator = new GameController();
+
+        textPaint = new Paint();
+        textPaint.setColor(Color.YELLOW);
+        textSize = MainActivity.GAME_HEIGHT/26f;
+        textPaint.setTextSize(textSize);
+        textHeight = MainActivity.GAME_HEIGHT/14f;
     }
 
     public void update(double delta) {
@@ -62,9 +70,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         // TODO: add switch case to allow menu creation and other settings
 
-        // TODO: add score counter to be displayed at the top
-
         operator.drawTargets(c);
+
+        c.drawText("Score: " + (int)operator.getScore(),
+                10, textHeight, textPaint);
+        c.drawText("Last hit: " + (int)operator.getLastHit(),
+                10, textHeight+textSize, textPaint);
+        c.drawText("Targets: " + operator.getTotalTargetsHit(),
+                10, textHeight+2*textSize, textPaint);
+        c.drawText("Misses: " + operator.getTotalTargetsMissed(),
+                10, textHeight+3*textSize, textPaint);
 
         holder.unlockCanvasAndPost(c);
     }
@@ -72,10 +87,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // compute player touch event
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                operator.computeTouch(event);
-                break;
+        if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            operator.computeTouch(event);
         }
         return true;
     }

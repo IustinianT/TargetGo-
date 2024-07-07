@@ -14,7 +14,16 @@ public class GameController {
     private long timeLastCreated;
     private long timeLastClearedTargets;
 
+    private double score;
+    private double lastHit;
+    private int totalTargetsHit;
+    private int totalTargetsMissed;
+
     public GameController() {
+        score = 0;
+        lastHit = 0;
+        totalTargetsHit = 0;
+        totalTargetsMissed = 0;
         targets = new ArrayList<>();
         timeLastCreated = System.currentTimeMillis();
         timeLastClearedTargets = System.currentTimeMillis();
@@ -25,23 +34,29 @@ public class GameController {
         if yes: open options page
         else: operations below
         */
-
         ArrayList<Target> targetsHit = getTargetsHit(event);
 
         // TODO: add effect for hitting/missing targets
 
-        // TODO: calculate points based on distance from the target center
-
+        double points = 0;
         if(targetsHit.isEmpty()) {
-            // TODO: remove points if no target is hit
-            System.out.println("NO TARGETS HIT!");
+            // player has missed a target
+            score = Math.max(score - 50, 0);
+            points = -50;
+            totalTargetsMissed++;
         }
         else {
-            System.out.println("HIT: "+targetsHit.size()+" TARGETS!!!");
+            // player has hit a (or multiple) target(s)
+            for(Target target : targetsHit) {
+                points = target.calculatePointsForDistance(new PointF(event.getX(), event.getY()));
+                score += points;
+                totalTargetsHit++;
+            }
         }
+        lastHit = points;
     }
 
-    /** Get list of targets hit on event, and set the target to be removed. **/
+    /** Get list of targets hit on event, and set the target(s) to be removed. **/
     private ArrayList<Target> getTargetsHit(MotionEvent event) {
         ArrayList<Target> targetsHit = new ArrayList<>();
         for(Target target : targets) {
@@ -87,5 +102,21 @@ public class GameController {
 
     public long getTimeLastClearedTargets() {
         return timeLastClearedTargets;
+    }
+
+    public double getScore() {
+        return score;
+    }
+
+    public int getTotalTargetsHit() {
+        return totalTargetsHit;
+    }
+
+    public int getTotalTargetsMissed() {
+        return totalTargetsMissed;
+    }
+
+    public double getLastHit() {
+        return lastHit;
     }
 }

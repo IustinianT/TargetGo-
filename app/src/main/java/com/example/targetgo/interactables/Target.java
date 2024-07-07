@@ -40,7 +40,16 @@ public class Target {
     }
 
     public boolean isHit(PointF touchPos) {
-        return Math.sqrt(Math.pow(touchPos.x - pos.x, 2) + Math.pow(touchPos.y - pos.y, 2)) < radius;
+        return calculateDistance(touchPos) < radius;
+    }
+
+    /** Calculate points based on the distance from target center to touch. **/
+    public double calculatePointsForDistance(PointF touchPos) {
+        return GameConstants.Target_Constants.RADIUS - calculateDistance(touchPos);
+    }
+
+    private double calculateDistance(PointF touchPos) {
+        return Math.sqrt(Math.pow(touchPos.x - pos.x, 2) + Math.pow(touchPos.y - pos.y, 2));
     }
 
     public boolean getToBeRemoved() {
