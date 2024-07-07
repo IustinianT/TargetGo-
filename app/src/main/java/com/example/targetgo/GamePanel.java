@@ -11,15 +11,19 @@ import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 
+import com.example.targetgo.helpers.GameConstants;
+import com.example.targetgo.interactables.Target;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private SurfaceHolder holder;
     private GameLoop gameLoop;
+    private GameController operator;
 
     private Random rand;
-    private Paint redPaint;
 
     public GamePanel(Context context) {
         super(context);
@@ -29,26 +33,28 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         gameLoop = new GameLoop(this);
 
         rand = new Random();
-        redPaint = new Paint();
-        redPaint.setColor(Color.RED);
+        operator = new GameController();
+
+        for(int i = 0; i < GameConstants.Operator_Constants.TARGET_AMOUNT; i++) {
+            operator.addTarget(new Target(
+                    rand.nextInt(MainActivity.GAME_WIDTH),
+                    rand.nextInt(MainActivity.GAME_HEIGHT),
+                    GameConstants.Target_Constants.RADIUS
+                    ));
+        }
     }
 
     public void update(double delta) {
-
+        operator.updateTargets();
     }
 
     public void render() {
         Canvas c = holder.lockCanvas();
         c.drawColor(Color.BLACK);
 
-        c.drawCircle(
-                MainActivity.GAME_WIDTH/2,
-                MainActivity.GAME_HEIGHT/2,
-                MainActivity.GAME_WIDTH/4,
-                redPaint);
+        operator.drawTargets(c);
 
         holder.unlockCanvasAndPost(c);
-
     }
 
     @Override
