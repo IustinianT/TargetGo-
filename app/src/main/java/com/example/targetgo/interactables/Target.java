@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.view.MotionEvent;
 
 import com.example.targetgo.helpers.GameConstants;
 
@@ -37,7 +38,15 @@ public class Target {
         }
     }
 
+    public boolean isHit(PointF touchPos) {
+        return Math.sqrt(Math.pow(touchPos.x - pos.x, 2) + Math.pow(touchPos.y - pos.y, 2)) < radius;
+    }
+
     public boolean getToBeRemoved() {
         return toBeRemoved;
+    }
+
+    public void setToBeRemoved() {
+        toBeRemoved = true;
     }
 }

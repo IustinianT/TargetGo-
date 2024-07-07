@@ -39,6 +39,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void update(double delta) {
         operator.updateTargets();
 
+        // create target based on constant delay
         if(System.currentTimeMillis() - operator.getTimeLastCreated() >=
                 GameConstants.Operator_Constants.INITIAL_TARGET_CREATION_DELAY * 1000) {
             operator.addTarget(new Target(
@@ -47,11 +48,18 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                     GameConstants.Target_Constants.RADIUS
             ));
         }
+
+        if(System.currentTimeMillis() - operator.getTimeLastClearedTargets() >=
+                GameConstants.Operator_Constants.TARGET_LIST_CLEAR_DELAY) {
+            operator.clearExpiredTargets();
+        }
     }
 
     public void render() {
         Canvas c = holder.lockCanvas();
         c.drawColor(Color.BLACK);
+
+        // TODO: add score counter to be displayed at the top
 
         operator.drawTargets(c);
 
@@ -60,6 +68,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                operator.computeTouch(event);
+                break;
+        }
         return true;
     }
 
