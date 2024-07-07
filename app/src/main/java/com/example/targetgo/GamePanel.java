@@ -49,6 +49,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             ));
         }
 
+        // clear targets list every set amount of time
         if(System.currentTimeMillis() - operator.getTimeLastClearedTargets() >=
                 GameConstants.Operator_Constants.TARGET_LIST_CLEAR_DELAY) {
             operator.clearExpiredTargets();
@@ -59,6 +60,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         Canvas c = holder.lockCanvas();
         c.drawColor(Color.BLACK);
 
+        // TODO: add switch case to allow menu creation and other settings
+
         // TODO: add score counter to be displayed at the top
 
         operator.drawTargets(c);
@@ -68,7 +71,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
+        // compute player touch event
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 operator.computeTouch(event);

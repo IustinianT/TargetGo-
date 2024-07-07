@@ -41,6 +41,7 @@ public class GameController {
         }
     }
 
+    /** Get list of targets hit on event, and set the target to be removed. **/
     private ArrayList<Target> getTargetsHit(MotionEvent event) {
         ArrayList<Target> targetsHit = new ArrayList<>();
         for(Target target : targets) {
@@ -69,6 +70,7 @@ public class GameController {
         timeLastCreated = System.currentTimeMillis();
     }
 
+    /** Remove all targets from the targets list once they have expired. **/
     public void clearExpiredTargets() {
         ArrayList<Target> removables = new ArrayList<>();
         for(Target target : targets) {

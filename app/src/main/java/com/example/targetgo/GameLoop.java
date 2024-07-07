@@ -12,6 +12,7 @@ public class GameLoop implements Runnable {
 
     @Override
     public void run() {
+        // set delta time and main loop
         long lastDelta = System.nanoTime();
         long nanoSec = 1_000_000_000;
         while(true) {

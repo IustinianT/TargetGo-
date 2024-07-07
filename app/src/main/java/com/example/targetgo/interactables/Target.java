@@ -25,6 +25,7 @@ public class Target {
         timeCreated = System.currentTimeMillis();
     }
 
+    /** If a constant time has passed since creation, set toBeRemoved of this target to true. **/
     public void updateTarget() {
         if(System.currentTimeMillis() - timeCreated >=
                 GameConstants.Target_Constants.DURATION * 1000) {
